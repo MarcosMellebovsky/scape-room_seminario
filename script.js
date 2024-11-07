@@ -2,6 +2,9 @@ let currentLevel = 1;
 let currentQuestionIndex = 0;
 let playerAnswers = [];
 let selectedAnswer = null; 
+let timerInterval;
+let timeRemaining = 60;
+
 
 let questions = [
     { 
@@ -78,6 +81,8 @@ let questions = [
     }
 ];
 
+
+
 function startGame() {
     document.getElementById("start-screen").classList.add("hidden");
     currentQuestionIndex = 0;
@@ -96,17 +101,44 @@ function subtituloNivel(currentLevel) {
         document.getElementById("level-title").innerText = `Nivel ${currentLevel} - Protocolos de comunicación`;
     }
 }
+function startTimer() {
+    timeRemaining = 60;
+    document.getElementById("time-bar").style.width = "100%";
+    
+    timerInterval = setInterval(() => {
+        timeRemaining--;
+        document.getElementById("time-bar").style.width = `${(timeRemaining / 60) * 100}%`;
+        
+        if (timeRemaining <= 0) {
+            clearInterval(timerInterval);
+            markIncorrectAndNextQuestion();
+        }
+    }, 1000);
+}
+function markIncorrectAndNextQuestion() {
+    playerAnswers[currentQuestionIndex] = "incorrect";  
+    currentQuestionIndex++;
+
+    let levelData = questions.find(level => level.level === currentLevel);
+
+    if (currentQuestionIndex < levelData.questions.length) {
+        showQuestion();
+    } else {
+        evaluateLevel();
+    }
+}
 
 function showQuestion() {
     let levelData = questions.find(level => level.level === currentLevel);
     let question = levelData.questions[currentQuestionIndex];
+    
     subtituloNivel(currentLevel);
     document.getElementById("question-text").innerText = question.text;
-    document.getElementById("pista").innerText = question.pista
+    document.getElementById("pista").innerText = question.pista;
 
     document.getElementById("options-container").innerHTML = "";
     document.getElementById("progress-indicator").innerText = `${currentQuestionIndex + 1}/${levelData.questions.length}`;
-
+    
     selectedAnswer = null;
     question.options.forEach(option => {
         let optionButton = document.createElement("button");
@@ -117,6 +149,9 @@ function showQuestion() {
     });
 
     document.getElementById("question-screen").classList.remove("hidden");
+    
+    clearInterval(timerInterval); 
+    startTimer(); 
 }
 
 
@@ -128,8 +163,9 @@ function selectAnswer(answer) {
     let selectedOption = Array.from(options).find(option => option.innerText === answer);
     if (selectedOption) selectedOption.classList.add("selected");
 }
-
 function checkAnswers() {
+    clearInterval(timerInterval); 
+
     if (!selectedAnswer) {
         alert("Por favor selecciona una opción antes de responder.");
         return;

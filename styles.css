@@ -146,5 +146,20 @@ button:hover {
     padding: 5px 10px;
     border-radius: 5px;
 }
+#timer-container {
+    width: 100%;
+    height: 10px;
+    background-color: #ddd;
+    margin-bottom: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+}
+
+#time-bar {
+    height: 100%;
+    width: 100%;
+    background-color: #4caf50;
+    transition: width 1s linear;
+}
 
 
