@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sala de Escape</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div id="start-screen" class="screen">
+        <h1>Bienvenido a la Sala de Escape</h1>
+        <button onclick="startGame()">Comenzar</button>
+    </div>
+    
+    <div id="question-screen" class="screen hidden">
+        <h2 id="level-title">Nivel 1</h2>
+        <p id="question-text">Pregunta</p>
+        <div id="options-container"></div>
+        <button onclick="checkAnswers()">Responder</button>
+    </div>
+    
+    <div id="result-screen" class="screen hidden">
+        <h2 id="result-message">Resultado</h2>
+        <button onclick="nextLevel()">Siguiente Nivel</button>
+    </div>
+    
+    <div id="final-screen" class="screen hidden">
+        <h2>¡Felicitaciones!</h2>
+        <p>Has completado todos los niveles.</p>
+        <button onclick="restartGame()">Volver a jugar</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
