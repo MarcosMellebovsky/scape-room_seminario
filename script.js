@@ -190,14 +190,22 @@ function evaluateLevel() {
     document.getElementById("question-screen").classList.add("hidden");
     document.getElementById("result-screen").classList.remove("hidden");
 
+    // Mensaje de resultado
     if (allCorrect) {
         document.getElementById("result-message").innerText = `¡Felicidades! Has pasado el nivel ${currentLevel}.`;
+        // Mostrar el botón "Siguiente nivel" y ocultar "Volver a intentarlo"
+        document.getElementById("next-level-button").classList.remove("hidden");
+        document.getElementById("retry-button").classList.add("hidden");
         currentLevel++;  
         currentQuestionIndex = 0;
     } else {
         document.getElementById("result-message").innerText = `Lo siento, no has pasado el nivel ${currentLevel}. Inténtalo de nuevo.`;
+        // Mostrar el botón "Volver a intentarlo" y ocultar "Siguiente nivel"
+        document.getElementById("retry-button").classList.remove("hidden");
+        document.getElementById("next-level-button").classList.add("hidden");
     }
 }
+
 
 function nextLevel() {
     if (currentLevel > questions.length) {

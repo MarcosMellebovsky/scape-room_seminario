@@ -162,4 +162,85 @@ button:hover {
     transition: width 1s linear;
 }
 
+/* Estilos para el botón en la pantalla de inicio */
+#start-screen button {
+    padding: 15px 30px;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    background-color: #ffbf00;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 15px rgba(255, 191, 0, 0.5);
+    transition: background-color 0.3s, transform 0.3s;
+}
+
+#start-screen button:hover {
+    background-color: #ff9f00;
+    transform: scale(1.1);
+}
+
+#start-screen h1 {
+    font-size: 28px;
+    margin-bottom: 20px;
+    color: #ffbf00;
+    text-shadow: 0px 0px 15px rgba(255, 191, 0, 0.5);
+}
+
+/* Estilos para los mensajes de resultado */
+#result-screen h2, #final-screen h2 {
+    color: #ff4500;
+    font-size: 24px;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+    margin-bottom: 15px;
+}
+
+#result-screen p, #final-screen p {
+    font-size: 18px;
+    color: #e0e0e0;
+    margin-bottom: 20px;
+}
+
+/* Botones en el resultado y final */
+#result-screen button, #final-screen button {
+    padding: 12px 25px;
+    font-size: 18px;
+    font-weight: bold;
+    background-color: #ffbf00;
+    color: #333;
+    border: none;
+    border-radius: 10px;
+    box-shadow: 0px 0px 10px rgba(255, 191, 0, 0.5);
+    cursor: pointer;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+#result-screen button:hover, #final-screen button:hover {
+    background-color: #ff9f00;
+    transform: scale(1.1);
+}
+
+/* Mensaje de felicitaciones */
+#final-screen h2 {
+    font-size: 28px;
+    color: #4caf50;
+    text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.7);
+}
+
+#final-screen p {
+    font-size: 20px;
+    color: #e0e0e0;
+}
+
+/* Animación de fade-in para las pantallas */
+.screen {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
 
