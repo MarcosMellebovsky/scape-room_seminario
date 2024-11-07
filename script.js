@@ -84,12 +84,29 @@ let questions = [
 
 
 function startGame() {
-    document.getElementById("start-screen").classList.add("hidden");
-    currentQuestionIndex = 0;
-    playerAnswers = [];
-    selectedAnswer = null;
-    showQuestion();
+    currentLevel = 1;
+    resetLevel();
+    document.getElementById('start-screen').classList.add('hidden');
+    document.getElementById('question-screen').classList.remove('hidden');
+    loadQuestion();
 }
+function loadQuestion() {
+    let currentQuestion = questions[currentLevel - 1].questions[currentQuestionIndex];
+    document.getElementById('level-title').textContent = `Nivel ${currentLevel}`;
+    document.getElementById('question-text').textContent = currentQuestion.text;
+    document.getElementById('pista').textContent = currentQuestion.pista;
+    let optionsContainer = document.getElementById('options-container');
+    optionsContainer.innerHTML = ''; // Limpiar opciones previas
+
+    currentQuestion.options.forEach(option => {
+        let button = document.createElement('button');
+        button.textContent = option;
+        button.classList.add('option-button');
+        button.onclick = () => selectAnswer(option, button);
+        optionsContainer.appendChild(button);
+    });
+}
+
 function subtituloNivel(currentLevel) {
     if (currentLevel == 1) {
         document.getElementById("level-title").innerText = `Nivel ${currentLevel} - Configuración de dispositivos de red`;
@@ -155,31 +172,43 @@ function showQuestion() {
 }
 
 
-function selectAnswer(answer) {
+function selectAnswer(answer, button) {
     selectedAnswer = answer;
-    let options = document.querySelectorAll(".option-button");
-    options.forEach(option => option.classList.remove("selected"));
-    
-    let selectedOption = Array.from(options).find(option => option.innerText === answer);
-    if (selectedOption) selectedOption.classList.add("selected");
+    document.querySelectorAll('.option-button').forEach(btn => btn.classList.remove('selected'));
+    button.classList.add('selected');
 }
 function checkAnswers() {
-    clearInterval(timerInterval); 
-
     if (!selectedAnswer) {
-        alert("Por favor selecciona una opción antes de responder.");
+        alert('Por favor, selecciona una respuesta.');
         return;
     }
 
-    playerAnswers[currentQuestionIndex] = selectedAnswer;
-    currentQuestionIndex++;
+    let currentQuestion = questions[currentLevel - 1].questions[currentQuestionIndex];
+    if (selectedAnswer === currentQuestion.answer) {
+        correctAnswersCount++;
+    }
+    playerAnswers.push(selectedAnswer);
+    selectedAnswer = null; // Restablecer para la siguiente pregunta
 
-    let levelData = questions.find(level => level.level === currentLevel);
-
-    if (currentQuestionIndex < levelData.questions.length) {
-        showQuestion();
+    if (currentQuestionIndex < questions[currentLevel - 1].questions.length - 1) {
+        currentQuestionIndex++;
+        loadQuestion();
     } else {
-        evaluateLevel();
+        showResult();
+    }
+}
+function showResult() {
+    document.getElementById('question-screen').classList.add('hidden');
+    document.getElementById('result-screen').classList.remove('hidden');
+
+    if (correctAnswersCount === questions[currentLevel - 1].questions.length) {
+        document.getElementById('result-message').textContent = '¡Felicitaciones, has pasado el nivel!';
+        document.getElementById('next-level-button').classList.remove('hidden');
+        document.getElementById('retry-button').classList.add('hidden');
+    } else {
+        document.getElementById('result-message').textContent = 'Lo siento, no has pasado el nivel.';
+        document.getElementById('retry-button').classList.remove('hidden');
+        document.getElementById('next-level-button').classList.add('hidden');
     }
 }
 
@@ -190,17 +219,14 @@ function evaluateLevel() {
     document.getElementById("question-screen").classList.add("hidden");
     document.getElementById("result-screen").classList.remove("hidden");
 
-    // Mensaje de resultado
     if (allCorrect) {
         document.getElementById("result-message").innerText = `¡Felicidades! Has pasado el nivel ${currentLevel}.`;
-        // Mostrar el botón "Siguiente nivel" y ocultar "Volver a intentarlo"
         document.getElementById("next-level-button").classList.remove("hidden");
         document.getElementById("retry-button").classList.add("hidden");
         currentLevel++;  
         currentQuestionIndex = 0;
     } else {
         document.getElementById("result-message").innerText = `Lo siento, no has pasado el nivel ${currentLevel}. Inténtalo de nuevo.`;
-        // Mostrar el botón "Volver a intentarlo" y ocultar "Siguiente nivel"
         document.getElementById("retry-button").classList.remove("hidden");
         document.getElementById("next-level-button").classList.add("hidden");
     }
@@ -208,23 +234,27 @@ function evaluateLevel() {
 
 
 function nextLevel() {
-    if (currentLevel > questions.length) {
-        document.getElementById("result-screen").classList.add("hidden");
-        document.getElementById("final-screen").classList.remove("hidden");
+    currentLevel++;
+    if (currentLevel <= questions.length) {
+        resetLevel();
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('question-screen').classList.remove('hidden');
+        loadQuestion();
     } else {
-        document.getElementById("result-screen").classList.add("hidden");
-        playerAnswers = [];
-        currentQuestionIndex = 0;
-
-        subtituloNivel(currentLevel);
-
-        showQuestion();
+        document.getElementById('result-screen').classList.add('hidden');
+        document.getElementById('final-screen').classList.remove('hidden');
     }
 }
 
-function restartGame() {
-    currentLevel = 1;
+function retryLevel() {
+    resetLevel();
+    document.getElementById('result-screen').classList.add('hidden');
+    document.getElementById('question-screen').classList.remove('hidden');
+    loadQuestion();
+}
+
+function resetLevel() {
     currentQuestionIndex = 0;
-    document.getElementById("final-screen").classList.add("hidden");
-    document.getElementById("start-screen").classList.remove("hidden");
+    correctAnswersCount = 0;
+    playerAnswers = [];
 }
