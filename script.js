@@ -141,10 +141,8 @@ function checkAnswers() {
     let levelData = questions.find(level => level.level === currentLevel);
 
     if (currentQuestionIndex < levelData.questions.length) {
-        // Mostrar siguiente pregunta
         showQuestion();
     } else {
-        // Verificar respuestas al final del nivel
         evaluateLevel();
     }
 }
@@ -158,7 +156,7 @@ function evaluateLevel() {
 
     if (allCorrect) {
         document.getElementById("result-message").innerText = `¡Felicidades! Has pasado el nivel ${currentLevel}.`;
-        currentLevel++;
+        currentLevel++;  
         currentQuestionIndex = 0;
     } else {
         document.getElementById("result-message").innerText = `Lo siento, no has pasado el nivel ${currentLevel}. Inténtalo de nuevo.`;
@@ -173,6 +171,9 @@ function nextLevel() {
         document.getElementById("result-screen").classList.add("hidden");
         playerAnswers = [];
         currentQuestionIndex = 0;
+
+        subtituloNivel(currentLevel);
+
         showQuestion();
     }
 }
