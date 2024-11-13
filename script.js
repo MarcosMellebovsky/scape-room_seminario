@@ -3,7 +3,9 @@ let currentQuestionIndex = 0;
 let playerAnswers = [];
 let selectedAnswer = null; 
 let timerInterval;
-let timeRemaining = 60;
+let duration = 0;
+let stopwatchInterval;
+
 
 
 let questions = [
@@ -89,6 +91,14 @@ function startGame() {
     document.getElementById('start-screen').classList.add('hidden');
     document.getElementById('question-screen').classList.remove('hidden');
     loadQuestion();
+    startStopwatch(); // Inicia el cronómetro cuando comienza el juego
+}
+function startStopwatch() {
+    stopwatchInterval = setInterval(() => {        document.getElementById("time").textContent = duration;
+    }, 1000);
+}
+function stopStopwatch() {
+    clearInterval(stopwatchInterval);
 }
 function loadQuestion() {
     let currentQuestion = questions[currentLevel - 1].questions[currentQuestionIndex];
@@ -119,26 +129,11 @@ function subtituloNivel(currentLevel) {
         document.getElementById("level-title").innerText = `Nivel ${currentLevel} - Protocolos de comunicación`;
     }
 }
-function startTimer() {
-    timeRemaining = 60; // Tiempo en segundos
-    clearInterval(timerInterval); // Asegúrate de que no haya otro temporizador corriendo
-    document.getElementById("time-bar").style.width = "100%"; // Reinicia la barra de tiempo al 100%
-
-    // Inicia el temporizador
-    timerInterval = setInterval(() => {
-        timeRemaining--; // Decrementa el tiempo restante en 1 segundo
-
-        // Calcula el ancho de la barra según el tiempo restante y actualiza el estilo
-        const widthPercentage = (timeRemaining / 60) * 100;
-        document.getElementById("time-bar").style.width = `${widthPercentage}%`;
-
-        // Verifica si el tiempo se ha agotado
-        if (timeRemaining <= 0) {
-            clearInterval(timerInterval); // Detiene el temporizador
-            markIncorrectAndNextQuestion(); // Llama a la función para manejar el cambio
-        }
-    }, 1000);
-}
+const stopwatch = setInterval(() => {
+    // Incrementa el tiempo
+    duration++;
+    document.getElementById("time").textContent = duration;
+  }, 1000); // Cada segundo (1000 ms)
 
 
 function markIncorrectAndNextQuestion() {
@@ -219,6 +214,11 @@ function showResult() {
         document.getElementById('retry-button').classList.remove('hidden');
         document.getElementById('next-level-button').classList.add('hidden');
     }
+
+    // Si es el último nivel y la última pregunta, detener el cronómetro
+    if (currentLevel === questions.length && currentQuestionIndex === questions[currentLevel - 1].questions.length - 1) {
+        stopStopwatch();
+    }
 }
 
 function evaluateLevel() {
@@ -242,6 +242,8 @@ function evaluateLevel() {
 }
 
 
+let finalTime; // Variable para almacenar el tiempo final
+
 function nextLevel() {
     currentLevel++;
     if (currentLevel <= questions.length) {
@@ -250,6 +252,9 @@ function nextLevel() {
         document.getElementById('question-screen').classList.remove('hidden');
         loadQuestion();
     } else {
+        clearInterval(stopwatch); // Detén el cronómetro
+        finalTime = duration; // Guarda el tiempo final
+        document.getElementById('final-time').textContent = finalTime; // Muestra el tiempo final
         document.getElementById('result-screen').classList.add('hidden');
         document.getElementById('final-screen').classList.remove('hidden');
     }
