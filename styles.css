@@ -219,6 +219,7 @@ button:hover {
 #result-screen button:hover, #final-screen button:hover {
     background-color: #ff9f00;
     transform: scale(1.1);
+
 }
 
 /* Mensaje de felicitaciones */
@@ -232,7 +233,16 @@ button:hover {
     font-size: 20px;
     color: #e0e0e0;
 }
-
+.final-container{
+    display: flex;
+    flex-direction: column;
+}
+.final-image{
+    width: 20%;
+}
+.restart-button{
+    width: 30%;
+}
 /* Animación de fade-in para las pantallas */
 .screen {
     opacity: 0;
@@ -243,6 +253,4 @@ button:hover {
     from { opacity: 0; }
     to { opacity: 1; }
 }
-
-
 

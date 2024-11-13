@@ -97,6 +97,7 @@ function loadQuestion() {
     document.getElementById('pista').textContent = currentQuestion.pista;
     let optionsContainer = document.getElementById('options-container');
     optionsContainer.innerHTML = ''; // Limpiar opciones previas
+    document.getElementById('progress-indicator').textContent = `${currentQuestionIndex + 1}/${questions[currentLevel - 1].questions.length}`;
 
     currentQuestion.options.forEach(option => {
         let button = document.createElement('button');
@@ -119,19 +120,27 @@ function subtituloNivel(currentLevel) {
     }
 }
 function startTimer() {
-    timeRemaining = 60;
-    document.getElementById("time-bar").style.width = "100%";
-    
+    timeRemaining = 60; // Tiempo en segundos
+    clearInterval(timerInterval); // Asegúrate de que no haya otro temporizador corriendo
+    document.getElementById("time-bar").style.width = "100%"; // Reinicia la barra de tiempo al 100%
+
+    // Inicia el temporizador
     timerInterval = setInterval(() => {
-        timeRemaining--;
-        document.getElementById("time-bar").style.width = `${(timeRemaining / 60) * 100}%`;
-        
+        timeRemaining--; // Decrementa el tiempo restante en 1 segundo
+
+        // Calcula el ancho de la barra según el tiempo restante y actualiza el estilo
+        const widthPercentage = (timeRemaining / 60) * 100;
+        document.getElementById("time-bar").style.width = `${widthPercentage}%`;
+
+        // Verifica si el tiempo se ha agotado
         if (timeRemaining <= 0) {
-            clearInterval(timerInterval);
-            markIncorrectAndNextQuestion();
+            clearInterval(timerInterval); // Detiene el temporizador
+            markIncorrectAndNextQuestion(); // Llama a la función para manejar el cambio
         }
     }, 1000);
 }
+
+
 function markIncorrectAndNextQuestion() {
     playerAnswers[currentQuestionIndex] = "incorrect";  
     currentQuestionIndex++;
