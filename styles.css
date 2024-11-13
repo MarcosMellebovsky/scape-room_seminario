@@ -246,9 +246,14 @@ button:hover {
 .final-container{
     display: flex;
     flex-direction: column;
+    justify-content: center;
+    text-align: center;
 }
 .final-image{
-    width: 20%;
+    width: 40%;
+    margin: auto;
+    display: flex;
+    justify-content: center;
 }
 .restart-button{
     width: 30%;
